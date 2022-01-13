@@ -1,0 +1,28 @@
+name: test - Pull Request
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@master
+        with:
+          node-version: '16.13.0'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run eslint on changed files
+        uses: tj-actions/eslint-changed-files@v8.2
+        with:
+          config_path: ".eslintrc.cjs"
+          extensions: "ts,tsx"
+          extra_args: "--max-warnings=0"
